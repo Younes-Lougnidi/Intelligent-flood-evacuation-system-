@@ -1,367 +1,206 @@
 # Intelligent Flood Evacuation System
 
-An intelligent geospatial analysis system that processes terrain and flood data to generate optimized evacuation routes and visualizations.
+A geospatial analysis system that processes terrain and flood data to generate optimized evacuation routes and interactive maps.
 
-## Table of Contents
+## Quick Start
 
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [System Components](#system-components)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Execution Guide](#execution-guide)
-- [Output](#output)
-
-## Overview
-
-The Intelligent Flood Evacuation System is designed to analyze flood-prone areas and provide data-driven evacuation routes. It processes Digital Elevation Models (DEM), flood maps, road networks, and waterway data to:
-
-1. Ingest and validate geospatial data
-2. Analyze terrain characteristics (slope, risk assessment)
-3. Classify road suitability for evacuation
-4. Generate interactive evacuation maps
-5. Serve real-time evacuation information via a web interface
-
-## Project Structure
-
-```
-flood-evac-map/
-├── config/                    # Configuration files
-│   └── params.yaml           # System parameters and settings
-├── data/                      # Data storage
-│   ├── derived/              # Processed/derived data outputs
-│   └── processed/            # Intermediate processing results
-├── cache/                     # Caching layer for downloaded data
-├── outputs/                   # Final output maps and visualizations
-├── src/                       # Source code
-│   ├── ingest/              # Data ingestion modules
-│   ├── terrain/             # Terrain analysis modules
-│   ├── classify/            # Road classification modules
-│   ├── visualize/           # Map visualization modules
-│   ├── route/               # Route optimization modules
-│   └── web/                 # Web server and interface
-├── tests/                     # Unit and integration tests
-├── main.py                    # CLI entry point for batch processing
-├── run_web.py                # Web server entry point
-└── requirements.txt           # Python dependencies
-```
-
-## System Components
-
-### 1. **Data Ingestion (`src/ingest/`)**
-Handles loading and validation of geospatial data sources.
-
-**Modules:**
-- **`pipeline.py`**: Orchestrates the complete data ingestion workflow
-- **`dem.py`**: Downloads and processes Digital Elevation Model (DEM) data
-- **`flood.py`**: Ingests flood map data and rasterizes it to match DEM resolution
-- **`network.py`**: Extracts road networks and waterways from OpenStreetMap
-
-**Output:**
-- DEM raster file
-- Flood extent raster file
-- Road network vector file
-- Waterways vector file
-
-### 2. **Terrain Analysis (`src/terrain/`)**
-Performs geospatial analysis on terrain characteristics.
-
-**Modules:**
-- **`slope.py`**: Calculates slope gradient from DEM data using Sobel operators
-- **`risk.py`**: Generates flood risk scores by combining:
-  - Flood extent data
-  - Elevation analysis
-  - Slope characteristics
-  - Proximity to flood zones
-
-**Output:**
-- Slope raster (gradient values)
-- Risk score raster (0-1 normalized values)
-
-### 3. **Road Classification (`src/classify/`)**
-Evaluates and classifies roads based on evacuation suitability.
-
-**Modules:**
-- **`pipelines.py`**: Manages the classification workflow
-- **`road.py`**: Analyzes road characteristics including:
-  - Flood risk exposure
-  - Slope constraints
-  - Connectivity analysis
-  - Elevation gain/loss along routes
-
-**Output:**
-- Classified road network with evacuation suitability scores
-
-### 4. **Visualization (`src/visualize/`)**
-Creates interactive maps for web and static display.
-
-**Modules:**
-- **`map.py`**: Generates Folium-based interactive web maps with:
-  - Evacuation routes overlaid
-  - Risk zones highlighted
-  - Slope visualization
-  - Road classification color-coding
-
-**Output:**
-- Interactive HTML map file (typically in `outputs/` directory)
-
-### 5. **Web Server (`src/web/`)**
-Provides real-time access to evacuation information.
-
-**Modules:**
-- **`app.py`**: FastAPI application serving:
-  - RESTful API endpoints for route queries
-  - Static map serving
-  - Health checks and system status
-- **`templates/`**: HTML/JavaScript frontend templates for the web interface
-
-**Features:**
-- Real-time route calculation
-- Interactive map interface
-- Mobile-responsive design
-- API documentation via Swagger UI
-
-## Prerequisites
-
-- **Python 3.8+**
-- **Conda** (recommended for geospatial dependencies) or **pip**
-- **GDAL** (Geospatial Data Abstraction Library)
-- **Git**
-- Internet connection (for downloading geospatial data)
-
-### Operating System Notes
-
-- **Windows**: Recommended to use Miniforge/Miniconda for dependency installation
-- **Linux/Mac**: Standard Python environments work well
-
-## Installation
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/Younes-Lougnidi/Intelligent-flood-evacuation-system-.git
-cd Intelligent-flood-evacuation-system-/flood-evac-map
-```
-
-### 2. Create Virtual Environment (Recommended)
-
-**Using Conda:**
-```bash
-conda create -n flood-evac python=3.10
-conda activate flood-evac
-```
-
-**Using venv:**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3. Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Verify Installation
+### 2. Run the System
 
+**Full Analysis:**
 ```bash
-python -c "import rasterio, geopandas, folium, fastapi; print('All dependencies installed successfully')"
+python main.py
 ```
+
+**Web Server (Interactive Map):**
+```bash
+python run_web.py
+```
+Then open: http://127.0.0.1:8000
+
+## Project Structure
+
+```
+flood-evac-map/
+├── config/
+│   └── params.yaml           # Configuration settings
+├── data/                      # Data storage
+│   ├── raw/                  # Raw geospatial data
+│   └── derived/              # Processed outputs
+├── src/                       # Source code
+│   ├── ingest/              # Data loading
+│   ├── terrain/             # Slope & risk analysis
+│   ├── classify/            # Road classification
+│   ├── visualize/           # Map generation
+│   └── web/                 # Web server
+├── main.py                    # Batch processing entry point
+├── run_web.py                # Web server entry point
+└── requirements.txt           # Dependencies
+```
+
+## System Components
+
+### Step 1: Data Ingestion (`src/ingest/`)
+Downloads and processes geospatial data:
+- Digital Elevation Model (DEM)
+- Flood maps
+- Road networks
+- Waterways
+
+**Files:**
+- `pipeline.py` - Orchestrates ingestion
+- `dem.py` - Processes elevation data
+- `flood.py` - Processes flood extent data
+- `network.py` - Extracts roads and waterways
+
+### Step 2: Terrain Analysis (`src/terrain/`)
+Analyzes terrain characteristics:
+- `slope.py` - Calculates slope gradients
+- `risk.py` - Generates flood risk scores (combines DEM, slope, flood data)
+
+### Step 3: Road Classification (`src/classify/`)
+Evaluates road suitability for evacuation:
+- `road.py` - Analyzes road characteristics
+- `pipelines.py` - Manages workflow
+
+**Output:** Roads scored by evacuation suitability
+
+### Step 4: Visualization (`src/visualize/`)
+Creates interactive maps:
+- `map.py` - Generates Folium-based HTML maps with evacuation routes, risk zones, and terrain
+
+### Step 5: Web Server (`src/web/`)
+Serves real-time evacuation information:
+- `app.py` - FastAPI server with REST API
+- `templates/` - Web interface
 
 ## Configuration
 
-### Main Configuration File: `config/params.yaml`
-
-Edit this file to customize system behavior:
+Edit `config/params.yaml` to customize:
 
 ```yaml
-# Area of Interest (AOI) - Geographic boundaries
+# Study area center point and radius
 aoi:
-  bounds:
-    west: <longitude>
-    south: <latitude>
-    east: <longitude>
-    north: <latitude>
+  center_lat: 35.01791471664536
+  center_lon: -5.91161571975982
+  buffer_km: 15              # Area radius in kilometers
 
-# Data source paths
+# Data sources
+dem:
+  source: copernicus_glo30   # 30m elevation data
+flood:
+  source: jrc_gsw            # Global surface water data
+  layer: occurrence          # Water presence (0-100%)
+
+# File paths
 paths:
-  dem: "data/dem.tif"
-  flood: "data/flood.tif"
-  roads: "data/roads.gpkg"
-  outputs: "outputs/"
+  raw_dem:      data/raw/dem
+  raw_flood:    data/raw/historical
+  raw_hydro:    data/raw/hydro
+  raw_roads:    data/raw/roads
+  processed:    data/derived/processed
+  outputs:      outputs
 
-# Terrain analysis parameters
-terrain:
-  slope_method: "sobel"
-  risk_threshold: 0.5
-  
-# Road classification parameters
-classification:
-  min_elevation_gain: 100
-  max_slope_grade: 15
-  risk_weighting: 0.6
+# Road classification thresholds
+classify:
+  safe_below:   0.33        # Risk score < 0.33 = safe
+  danger_above: 0.35        # Risk score > 0.35 = danger
 
-# Web server settings
-server:
-  host: "0.0.0.0"
-  port: 8000
+# Evacuation zone locations (optional)
+fixed_zones:
+  - lat: 35.024
+    lon: -5.903
+  - lat: 35.012
+    lon: -5.930
+  # Add more zones as needed
 ```
-
-**Key Parameters:**
-- `bounds`: Define your area of interest (supports any EPSG:4326 coordinates)
-- `dem`: Path to Digital Elevation Model file
-- `flood`: Path to flood map GeoTIFF
-- `risk_threshold`: Minimum risk score to flag areas as high-risk
-- `max_slope_grade`: Maximum slope percentage for safe evacuation routes
 
 ## Execution Guide
 
-### Option 1: Batch Processing (Full Pipeline)
-
-Run the complete analysis pipeline from start to finish:
+### Option 1: Full Pipeline
 
 ```bash
 python main.py
 ```
 
-**This will execute in sequence:**
-1. ✓ Data Ingestion - Download and process DEM, flood data, road networks
-2. ✓ Terrain Analysis - Calculate slope and risk scores
-3. ✓ Road Classification - Evaluate evacuation route suitability
-4. ✓ Visualization - Generate interactive evacuation map
+Runs all 4 steps sequentially:
+1. ✓ Data ingestion
+2. ✓ Terrain analysis (slope & risk)
+3. ✓ Road classification
+4. ✓ Map generation
 
-**Expected Output:**
-```
-============================================================
-Intelligent Evacuation System - data ingestion
-============================================================
-14:32:15  Data ingestion starting...
-14:32:45  -- Ingestion summary ----------------------------------------
-14:32:45    AOI bounds   W=-0.1234  S=51.4567  E=0.1234  N=51.6789
-14:32:45    DEM          data/dem.tif
-14:32:45    Flood        data/flood.tif
-14:32:45    Roads        data/roads.gpkg
-14:32:45  ============================================================
-...
-[Process continues through all 4 steps]
-```
+**Output:** Interactive map in `outputs/evacuation_map.html`
 
-### Option 2: Web Server (Interactive Access)
-
-Start the web application for real-time access:
+### Option 2: Web Server
 
 ```bash
 python run_web.py
 ```
 
-**Output:**
-```
-============================================================
-Intelligent Evacuation System - Web Server
-Open http://127.0.0.1:8000 in your browser
-From your phone (same Wi-Fi): http://<YOUR-PC-IP>:8000
-============================================================
-INFO:     Uvicorn running on http://0.0.0.0:8000
-```
+**Access:**
+- Local: http://127.0.0.1:8000
+- Mobile (same network): http://[YOUR-PC-IP]:8000
+- API docs: http://127.0.0.1:8000/docs
 
-**Access Points:**
-- **Local Machine**: http://127.0.0.1:8000
-- **Mobile (same network)**: http://[YOUR-PC-IP]:8000 (e.g., http://192.168.1.100:8000)
-- **API Documentation**: http://127.0.0.1:8000/docs
-- **Alternative API Docs**: http://127.0.0.1:8000/redoc
+### Option 3: Run Individual Modules
 
-### Option 3: Individual Module Execution
-
-Run specific components independently:
-
-**Generate Only Slope Analysis:**
 ```python
+# Generate slope analysis
 from src.terrain.slope import compute
-slope_path = compute(
-    dem_path="data/dem.tif",
-    output_dir="data/derived/processed"
-)
-```
+slope_path = compute(dem_path="data/dem.tif", output_dir="data/derived/processed")
 
-**Generate Only Risk Assessment:**
-```python
+# Generate risk assessment
 from src.terrain.risk import compute
 risk_path = compute(
     dem_path="data/dem.tif",
-    slope_path="data/derived/processed/slope.tif",
+    slope_path=slope_path,
     flood_path="data/flood.tif",
     output_dir="data/derived/processed"
 )
-```
 
-**Classify Roads:**
-```python
+# Classify roads
 from src.classify.pipelines import run
-classify_result = run("config/params.yaml")
-```
+roads = run("config/params.yaml")
 
-**Create Visualization Map:**
-```python
+# Create map
 from src.visualize.map import create_evacuation_map
-map_path = create_evacuation_map(
-    roads_path="data/roads_classified.gpkg",
-    output_dir="outputs"
-)
+map_file = create_evacuation_map(roads_path="data/roads_classified.gpkg", output_dir="outputs")
 ```
 
-## Output
+## Output Files
 
-### Generated Files
+Generated in `outputs/` directory:
 
-After execution, the system produces:
+| File | Description |
+|------|-------------|
+| `evacuation_map.html` | Interactive web map with evacuation routes |
+| `risk_score.tif` | Risk assessment heatmap (0-1 scale) |
+| `slope.tif` | Slope gradient visualization |
+| `roads_classified.gpkg` | Road network with suitability scores |
 
-**Location:** `outputs/` directory
+### Map Legend
 
-| File | Type | Description |
-|------|------|-------------|
-| `evacuation_map.html` | Interactive Map | Folium-based web map with evacuation routes |
-| `risk_score.tif` | Raster | Risk assessment heatmap (0-1 scale) |
-| `slope.tif` | Raster | Slope gradient visualization |
-| `roads_classified.gpkg` | Vector | Road network with suitability scores |
+- 🟢 **Green** - Highly suitable evacuation routes
+- 🟡 **Yellow** - Moderate suitability
+- 🔴 **Red** - High-risk zones
 
-### Map Features
+## Requirements
 
-The generated evacuation map includes:
+- Python 3.8+
+- See `requirements.txt` for all dependencies (rasterio, geopandas, folium, fastapi, etc.)
 
-- **Road Classifications**: Color-coded by evacuation suitability
-  - 🟢 Green: Highly suitable evacuation routes
-  - 🟡 Yellow: Moderate suitability
-  - 🔴 Red: High-risk zones
+## Data Directories
 
-- **Risk Visualization**: Heat map overlay showing flood risk areas
-- **Terrain Data**: Slope and elevation contours
-- **Interactive Controls**: Zoom, pan, layer toggling
-- **Legend**: Full documentation of visual elements
-
-### Web Server Output
-
-When running `run_web.py`, the server provides:
-
-- **Interactive Map**: Real-time evacuation route visualization
-- **REST API**: Endpoints for route calculation and data queries
-- **API Explorer**: Swagger UI for testing endpoints
-- **Mobile Access**: Responsive design for smartphones/tablets
-
-## Database and Caching
-
-### Cache Directory (`cache/`)
-- Stores downloaded geospatial data to avoid re-downloading
-- Reduces processing time on subsequent runs
-- Can be manually cleared to force data re-download
-
-### Data Directory (`data/`)
-- **`derived/`**: Contains terrain analysis outputs
-- **`processed/`**: Intermediate processing results
-- Safe to delete between runs (will be regenerated)
+- **`cache/`** - Cached downloaded data (safe to delete)
+- **`data/raw/`** - Raw geospatial input data
+- **`data/derived/`** - Processed analysis outputs
+- **`outputs/`** - Final maps and visualizations
 
 ---
 
-**Project Owner:** Younes-Lougnidi  
 **Repository:** [Intelligent-flood-evacuation-system-](https://github.com/Younes-Lougnidi/Intelligent-flood-evacuation-system-)
