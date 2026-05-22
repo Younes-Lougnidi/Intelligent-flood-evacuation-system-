@@ -1,0 +1,42 @@
+aoi:
+  center_lat: 35.01791471664536
+  center_lon: -5.91161571975982
+  buffer_km: 15
+
+dem:
+  source: copernicus_glo30   # Copernicus GLO-30, 30 m, COG on AWS S3
+
+flood:
+  source: jrc_gsw            # JRC Global Surface Water v1.4 (2021), COG on GCS
+  layer: occurrence          # pixel value = % of time water was present (0–100)
+
+paths:
+  raw_dem:      data/raw/dem
+  raw_flood:    data/raw/historical
+  raw_hydro:    data/raw/hydro
+  raw_roads:    data/raw/roads
+  processed:  data/derived/processed  
+  outputs:      outputs
+
+classify:
+  safe_below:   0.33
+  danger_above: 0.35
+
+# Provide exact latitude/longitude pairs for evacuation zones. 
+# If provided, the system will snap these points to the nearest SAFE road node 
+# instead of computing zones automatically.
+fixed_zones:
+  - lat: 35.024
+    lon: -5.903
+  - lat: 35.012
+    lon: -5.930
+  - lat: 34.998
+    lon: -5.922
+  - lat: 35.005
+    lon: -5.885
+  - lat: 34.989
+    lon: -5.906
+  - lat: 34.987
+    lon: -5.898
+  - lat: 34.986
+    lon: -5.895

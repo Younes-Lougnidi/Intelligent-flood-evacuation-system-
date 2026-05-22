@@ -1,0 +1,93 @@
+# ==============================
+# Python
+# ==============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# ==============================
+# IDE / Editor
+# ==============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# ==============================
+# OS generated files
+# ==============================
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ==============================
+# Jupyter Notebooks
+# ==============================
+.ipynb_checkpoints/
+
+# ==============================
+# Cache (OSMnx / project cache)
+# ==============================
+flood-evac-map/cache/
+
+# ==============================
+# Outputs (generated maps, reports, GeoJSON)
+# ==============================
+flood-evac-map/outputs/
+
+# ==============================
+# Raw / large geospatial data
+# (DEM rasters, shapefiles, etc.)
+# Keep this ignored to avoid pushing
+# large binary files to GitHub.
+# Document download instructions in README.
+# ==============================
+flood-evac-map/data/raw/dem/
+flood-evac-map/data/raw/hydro/
+flood-evac-map/data/raw/historical/
+flood-evac-map/data/processed/
+flood-evac-map/data/derived/
+*.tif
+*.tiff
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.geojson
+!flood-evac-map/data/raw/roads/*.geojson
+
+# ==============================
+# Environment & Secrets
+# ==============================
+.env
+.env.*
+*.pem
+*.key
+
+# ==============================
+# Misc
+# ==============================
+*.log
+*.bak
+*.tmp
+*.temp
+.claude/

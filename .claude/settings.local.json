@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip --version)",
+      "Bash(where python *)",
+      "Bash(where pip *)",
+      "Bash(conda env *)",
+      "Bash(conda info *)",
+      "Bash(python -m pip list)",
+      "Bash(findstr -i \"rasterio numpy geopandas osmnx\")",
+      "Bash(conda install *)",
+      "Bash(findstr -i \"rasterio numpy geopandas shapely pyproj osmnx pyyaml\")",
+      "Bash(python -c \"import osmnx as ox; print\\(dir\\(ox\\)\\)\")",
+      "Bash(python -c \"import sys; data=sys.stdin.read\\(\\); print\\([x for x in eval\\(data\\) if 'Error' in x or 'error' in x or 'Exception' in x]\\)\")",
+      "Bash(python -c \"import osmnx as ox; excs = [x for x in dir\\(ox\\) if 'Error' in x or 'Exception' in x]; print\\(excs\\)\")",
+      "Bash(python -c \"import osmnx._errors as e; print\\(dir\\(e\\)\\)\")",
+      "Bash(python -c \"import rasterio; print\\(rasterio.__gdal_data__\\)\")",
+      "Bash(python -c \"import rasterio; import rasterio.env; print\\(rasterio.env.getenv\\(\\)\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import sys; print\\(sys.executable\\)\")",
+      "Bash(not exist *)",
+      "Bash(\"C:/Users/lougn/miniforge3/python.exe\" -c \"import fastapi, uvicorn; print\\('fastapi', fastapi.__version__\\); print\\('uvicorn', uvicorn.__version__\\)\")",
+      "Bash(C:/Users/lougn/miniforge3/python.exe -c ' *)"
+    ]
+  }
+}
